@@ -5,16 +5,24 @@ import exceptions.EmployeeNotFoundException;
 import exceptions.EmployeeStorageIsFullException;
 import exceptions.NotEnterDataException;
 import org.springframework.stereotype.Service;
+import service.EmployeeService;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
-public class EmployeeService {
-    List<Employee> employeeList = new ArrayList<>() ;
-    int maxSizeOfEmployeeList = 10;
+public class EmployeeServiceImpl implements EmployeeService {
+    private final List<Employee> employeeList;
+    private final int maxSizeOfEmployeeList = 10;
 
-    public Employee addEmployee (String firstName, String lastName) {
+    public EmployeeServiceImpl() {
+        this.employeeList = new ArrayList<>();
+    }
+
+    @Override
+    public Employee add(String firstName, String lastName) {
         if (firstName == null || lastName == null) {
             throw new NotEnterDataException("not enter data");
         }
@@ -29,39 +37,35 @@ public class EmployeeService {
         return addingEmployee;
     }
 
-    public Employee removeEmployee(String firstName, String lastName) {
+    @Override
+    public Employee remove(String firstName, String lastName) {
         if (firstName == null || lastName == null) {
             throw new NotEnterDataException("not enter data");
         }
         Employee removeEmployee = new Employee(firstName, lastName);
-        for (Employee employee : employeeList) {
-            if (removeEmployee.equals(employee)) {
-                employeeList.remove(removeEmployee);
-                return removeEmployee;
-            }
-            if (!removeEmployee.equals((Employee) employee)) {
-                throw new EmployeeNotFoundException("employee not found");
-            }
+        if (employeeList.contains(removeEmployee)) {
+            employeeList.remove(removeEmployee);
+            return removeEmployee;
+        } else {
+            throw new EmployeeNotFoundException("employee not found");
         }
-        return null;
     }
 
-    public Employee findEmployee(String firstName, String lastName) {
+    @Override
+    public Employee find(String firstName, String lastName) {
         if (firstName == null || lastName == null) {
             throw new NotEnterDataException("not enter data");
         }
         Employee findingEmployee = new Employee(firstName, lastName);
-        for (Employee employee : employeeList) {
-            if (!findingEmployee.equals((Employee) employee)) {
-                throw new EmployeeNotFoundException("employee not found");
-            } else {
-                return findingEmployee;
-            }
+        if (!employeeList.contains(findingEmployee)) {
+            throw new EmployeeNotFoundException("employee not found");
+        } else {
+            return findingEmployee;
         }
-        return null;
     }
 
-    public Employee showAllEmployees () { // доделать, не работает
-        return (Employee) employeeList;
+    @Override
+    public Collection<Employee> showAll() {
+        return Collections.unmodifiableList(employeeList);
     }
 }

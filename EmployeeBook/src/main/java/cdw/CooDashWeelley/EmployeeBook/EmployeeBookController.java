@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
+
 @RequestMapping("/employee")
 @RestController
 public class EmployeeBookController {
-    public final EmployeeService employeeService;
+    public final EmployeeServiceImpl service;
 
-    public EmployeeBookController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public EmployeeBookController(EmployeeServiceImpl employeeService) {
+        this.service = employeeService;
     }
 
     @GetMapping
@@ -28,7 +31,7 @@ public class EmployeeBookController {
                                 @RequestParam(name = "lastName", required = false) String lastName
     ) {
         try {
-            return employeeService.addEmployee(firstName, lastName);
+            return service.add(firstName, lastName);
         } catch (EmployeeStorageIsFullException e) {
             throw new EmployeeStorageIsFullException("storage is full");
         } catch (EmployeeAlreadyAddedException e) {
@@ -43,7 +46,7 @@ public class EmployeeBookController {
                                    @RequestParam(name = "lastName", required = false) String lastName
     ) {
         try {
-            return employeeService.removeEmployee(firstName, lastName);
+            return service.remove(firstName, lastName);
         } catch (EmployeeNotFoundException e) {
             throw new EmployeeNotFoundException("not found");
         } catch (NotEnterDataException e) {
@@ -56,15 +59,16 @@ public class EmployeeBookController {
                                  @RequestParam(name = "lastName", required = false) String lastName
     ) {
         try {
-            return employeeService.findEmployee(firstName, lastName);
+            return service.find(firstName, lastName);
         } catch (EmployeeNotFoundException e) {
             throw new EmployeeNotFoundException("not found");
         } catch (NotEnterDataException e) {
             throw new NotEnterDataException("enter data");
         }
     }
-    @GetMapping (path = "/employees")
-    public Employee showAllEmployees() {
-        return employeeService.showAllEmployees();
+
+    @GetMapping(path = "/showAll")
+    public Collection<Employee> showAllEmployees() {
+        return service.showAll();
     }
 }
