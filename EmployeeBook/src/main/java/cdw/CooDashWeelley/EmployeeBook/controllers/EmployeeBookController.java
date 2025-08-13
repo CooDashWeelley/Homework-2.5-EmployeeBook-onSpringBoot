@@ -1,16 +1,17 @@
-package cdw.CooDashWeelley.EmployeeBook;
+package cdw.CooDashWeelley.EmployeeBook.controllers;
 
-import exceptions.EmployeeAlreadyAddedException;
-import exceptions.EmployeeNotFoundException;
-import exceptions.EmployeeStorageIsFullException;
-import exceptions.NotEnterDataException;
+import cdw.CooDashWeelley.EmployeeBook.Employee;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeAlreadyAddedException;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeNotFoundException;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeStorageIsFullException;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.NotEnterDataException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import cdw.CooDashWeelley.EmployeeBook.services.EmployeeServiceImpl;
 
 import java.util.Collection;
-
 
 @RequestMapping("/employee")
 @RestController
@@ -104,40 +105,14 @@ public class EmployeeBookController {
         return "ЗП проиндексирована на " + index + " %";
     }
 
-    @GetMapping(path = "/minSalaryInDep")
-    public Employee minSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
-        return service.minSalaryInDepartment(dep);
-    }
-
-    @GetMapping(path = "/maxSalaryInDep")
-    public Employee maxSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
-        return service.maxSalaryInDepartment(dep);
-    }
-
-    @GetMapping(path = "/monthSalaryInDep")
-    public int monthSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
-        return service.monthSalaryInDepartment(dep);
-    }
-
-    @GetMapping(path = "/indexSalaryInDep")
-    public String indexSalaryInDep(@RequestParam(name = "dep", required = false) int dep,
-                                   @RequestParam(name = "index", required = false) int index) {
-        service.indexSalaryInDepartment(dep, index);
-        return "ЗП проиндексирована в отделе: " + dep + " на " + index + " %";
-    }
-
-    @GetMapping(path = "/empInDep")
-    public Collection <Employee> employeesInDepartment(@RequestParam(name = "dep", required = false) int dep) {
-        return service.employeesInDepartment(dep);
-    }
 
     @GetMapping(path = "/salaryLessThan")
-    public Collection <Employee> salaryLessThan(@RequestParam(name = "amount", required = false) int amount) {
+    public Collection<Employee> salaryLessThan(@RequestParam(name = "amount", required = false) int amount) {
         return service.salaryLessThan(amount);
     }
 
     @GetMapping(path = "/salaryMoreThan")
-    public Collection <Employee> salaryMoreThan(@RequestParam(name = "amount", required = false) int amount) {
+    public Collection<Employee> salaryMoreThan(@RequestParam(name = "amount", required = false) int amount) {
         return service.salaryMoreThan(amount);
     }
 }

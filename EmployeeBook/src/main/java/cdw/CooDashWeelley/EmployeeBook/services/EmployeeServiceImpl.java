@@ -1,11 +1,11 @@
-package cdw.CooDashWeelley.EmployeeBook;
+package cdw.CooDashWeelley.EmployeeBook.services;
 
-import exceptions.EmployeeAlreadyAddedException;
-import exceptions.EmployeeNotFoundException;
-import exceptions.EmployeeStorageIsFullException;
-import exceptions.NotEnterDataException;
+import cdw.CooDashWeelley.EmployeeBook.Employee;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeAlreadyAddedException;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeNotFoundException;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeStorageIsFullException;
+import cdw.CooDashWeelley.EmployeeBook.exceptions.NotEnterDataException;
 import org.springframework.stereotype.Service;
-import service.EmployeeService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,10 +15,14 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final List<Employee> employeeList;
-    private final int maxSizeOfEmployeeList = 10;
+    private int maxSizeOfEmployeeList = 10;
 
     public EmployeeServiceImpl() {
         this.employeeList = new ArrayList<>();
+    }
+
+    public List<Employee> getEmployeeList() {
+        return new ArrayList<>(employeeList);
     }
 
     @Override
@@ -124,80 +128,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setSalary(employee.getSalary() + employee.getSalary() / 100 * index);
             }
         }
-    }
-
-    @Override
-    public Employee minSalaryInDepartment(int department) {
-        int minSalaryInDepartment = 0;
-        int idOfMinSalaryInDepartment = 0;
-        for (int i = 0; i < this.employeeList.size(); i++) {
-            if (this.employeeList.get(i) != null && this.employeeList.get(i).getDepartment() == department && minSalaryInDepartment == 0) {
-                minSalaryInDepartment = this.employeeList.get(i).getSalary();
-            }
-            if (this.employeeList.get(i) != null && this.employeeList.get(i).getDepartment() == department && minSalaryInDepartment >= this.employeeList.get(i).getSalary()) {
-                minSalaryInDepartment = this.employeeList.get(i).getSalary();
-                idOfMinSalaryInDepartment = i;
-            }
-        }
-        return this.employeeList.get(idOfMinSalaryInDepartment);
-    }
-
-    @Override
-    public Employee maxSalaryInDepartment(int department) {
-        int maxSalaryInDepartment = 0;
-        int idOfMinSalaryInDepartment = 0;
-        for (int i = 0; i < this.employeeList.size(); i++) {
-            if (this.employeeList.get(i) != null && this.employeeList.get(i).getDepartment() == department && maxSalaryInDepartment == 0) {
-                maxSalaryInDepartment = this.employeeList.get(i).getSalary();
-            }
-            if (this.employeeList.get(i) != null && this.employeeList.get(i).getDepartment() == department && maxSalaryInDepartment <= this.employeeList.get(i).getSalary()) {
-                maxSalaryInDepartment = this.employeeList.get(i).getSalary();
-                idOfMinSalaryInDepartment = i;
-            }
-        }
-        return this.employeeList.get(idOfMinSalaryInDepartment);
-    }
-
-    @Override
-    public int monthSalaryInDepartment(int department) {
-        int sum = 0;
-        for (Employee employee : this.employeeList) {
-            if (employee != null && employee.getDepartment() == department) {
-                sum += employee.getSalary();
-            }
-        }
-        return sum;
-    }
-
-    @Override
-    public int averageSalaryInDepartment(int department) {
-        int amountOfEmployeeInDepartment = 0;
-        for (Employee employee : this.employeeList) {
-            if (employee != null && employee.getDepartment() == department) {
-                amountOfEmployeeInDepartment++;
-            }
-        }
-        return monthSalaryInDepartment(department) / amountOfEmployeeInDepartment;
-    }
-
-    @Override
-    public void indexSalaryInDepartment(int department, int index) {
-        for (Employee employee : this.employeeList) {
-            if (employee != null && employee.getDepartment() == department) {
-                employee.setSalary(employee.getSalary() + employee.getSalary() / 100 * index);
-            }
-        }
-    }
-
-    @Override
-    public Collection<Employee> employeesInDepartment(int department) {
-        List<Employee> employeesInDepartmentList = new ArrayList<>();
-        for (Employee employee : this.employeeList) {
-            if (employee != null && employee.getDepartment() == department) {
-                employeesInDepartmentList.add(employee);
-            }
-        }
-        return employeesInDepartmentList;
     }
 
     @Override

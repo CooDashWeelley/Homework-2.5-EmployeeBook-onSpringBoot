@@ -1,4 +1,4 @@
-package service;
+package cdw.CooDashWeelley.EmployeeBook.services;
 
 import cdw.CooDashWeelley.EmployeeBook.Employee;
 
@@ -24,18 +24,6 @@ public interface EmployeeService {
     int averageSalary();
 
     void indexSalary(int index);
-
-    Employee minSalaryInDepartment(int department);
-
-    Employee maxSalaryInDepartment(int department);
-
-    int monthSalaryInDepartment(int department);
-
-    int averageSalaryInDepartment(int department);
-
-    void indexSalaryInDepartment(int department, int index);
-
-    Collection<Employee> employeesInDepartment(int department);
 
     Collection<Employee> salaryLessThan(int amount);
 
