@@ -7,10 +7,8 @@ import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeStorageIsFullException
 import cdw.CooDashWeelley.EmployeeBook.exceptions.NotEnterDataException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -26,8 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee add(String firstName, String lastName, int salary, int department) {
-        if (firstName == null || lastName == null) {
+    public Employee add(String firstName, String lastName, Integer salary, Integer department) {
+        if (firstName == null || lastName == null || salary == null || department == null) {
             throw new NotEnterDataException("not enter data");
         }
         if (employeeList.size() == maxSizeOfEmployeeList) {
@@ -42,8 +40,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee remove(String firstName, String lastName, int salary, int department) {
-        if (firstName == null || lastName == null) {
+    public Employee remove(String firstName, String lastName, Integer salary, Integer department) {
+        if (firstName == null || lastName == null || salary == null || department == null) {
             throw new NotEnterDataException("not enter data");
         }
         Employee removeEmployee = new Employee(firstName, lastName, salary, department);
@@ -56,8 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee find(String firstName, String lastName, int salary, int department) {
-        if (firstName == null || lastName == null) {
+    public Employee find(String firstName, String lastName, Integer salary, Integer department) {
+        if (firstName == null || lastName == null || salary == null || department == null) {
             throw new NotEnterDataException("not enter data");
         }
         Employee findingEmployee = new Employee(firstName, lastName, salary, department);
@@ -75,80 +73,48 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public int monthSalary() {
-        int sum = 0;
-        for (Employee employee : this.employeeList) {
-            if (employee != null) {
-                sum += employee.getSalary();
-            }
-        }
-        return sum;
+        return employeeList.stream()
+                .mapToInt(e -> e.getSalary())
+                .sum();
     }
 
     @Override
     public Employee minSalary() {
-        int minSalary = this.employeeList.get(0).getSalary();
-        int idOfMinSalary = 0;
-        for (int i = 0; i < this.employeeList.size(); i++) {
-            if (this.employeeList.get(i) != null && this.employeeList.get(i).getSalary() < minSalary) {
-                minSalary = this.employeeList.get(i).getSalary();
-                idOfMinSalary = i;
-            }
-        }
-        return this.employeeList.get(idOfMinSalary);
+        return employeeList.stream()
+                .min(Comparator.comparingInt(e -> e.getSalary()))
+                .get();
     }
 
     @Override
     public Employee maxSalary() {
-        int maxSalary = this.employeeList.get(0).getSalary();
-        int id = 0;
-        for (int i = 0; i < this.employeeList.size(); i++) {
-            if (this.employeeList.get(i) != null && this.employeeList.get(i).getSalary() > maxSalary) {
-                maxSalary = this.employeeList.get(i).getSalary();
-                id = i;
-            }
-        }
-        return this.employeeList.get(id);
+        return employeeList.stream()
+                .max(Comparator.comparingInt(e -> e.getSalary()))
+                .get();
     }
 
     @Override
     public int averageSalary() {
-        int amountOfEmployee = 0;
-        for (Employee employee : this.employeeList) {
-            if (employee != null) {
-                amountOfEmployee++;
-            }
-        }
-        return monthSalary() / amountOfEmployee;
+        return monthSalary() / employeeList.size();
     }
 
     @Override
     public void indexSalary(int index) {
-        for (Employee employee : this.employeeList) {
-            if (employee != null) {
-                employee.setSalary(employee.getSalary() + employee.getSalary() / 100 * index);
-            }
-        }
+        employeeList.stream()
+                .map(e -> e.getSalary() / 100 * index)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<Employee> salaryLessThan(int amount) {
-        List<Employee> salaryLessThanList = new ArrayList<>();
-        for (Employee employee : this.employeeList) {
-            if (employee != null && amount > employee.getSalary()) {
-                salaryLessThanList.add(employee);
-            }
-        }
-        return salaryLessThanList;
+        return employeeList.stream()
+                .filter(e -> e.getSalary() < amount)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<Employee> salaryMoreThan(int amount) {
-        List<Employee> salaryMoreThanList = new ArrayList<>();
-        for (Employee employee : this.employeeList) {
-            if (employee != null && amount < employee.getSalary()) {
-                salaryMoreThanList.add(employee);
-            }
-        }
-        return salaryMoreThanList;
+        return employeeList.stream()
+                .filter(e -> e.getSalary() > amount)
+                .collect(Collectors.toList());
     }
 }
