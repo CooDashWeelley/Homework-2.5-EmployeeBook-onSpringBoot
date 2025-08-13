@@ -1,15 +1,15 @@
 package cdw.CooDashWeelley.EmployeeBook.controllers;
 
-import cdw.CooDashWeelley.EmployeeBook.Employee;
+import cdw.CooDashWeelley.EmployeeBook.model.Employee;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeAlreadyAddedException;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeNotFoundException;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeStorageIsFullException;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.NotEnterDataException;
+import cdw.CooDashWeelley.EmployeeBook.services.EmployeeServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import cdw.CooDashWeelley.EmployeeBook.services.EmployeeServiceImpl;
 
 import java.util.Collection;
 
@@ -101,18 +101,30 @@ public class EmployeeBookController {
 
     @GetMapping(path = "/indexSalary")
     public String indexSalary(@RequestParam(name = "index", required = false) int index) {
-        service.indexSalary(index);
-        return "ЗП проиндексирована на " + index + " %";
+        try {
+            service.indexSalary(index);
+            return "ЗП проиндексирована на " + index + " %";
+        } catch (NotEnterDataException e) {
+            throw new NotEnterDataException("enter data");
+        }
     }
 
 
     @GetMapping(path = "/salaryLessThan")
     public Collection<Employee> salaryLessThan(@RequestParam(name = "amount", required = false) int amount) {
-        return service.salaryLessThan(amount);
+        try {
+            return service.salaryLessThan(amount);
+        } catch (NotEnterDataException e) {
+            throw new NotEnterDataException("enter data");
+        }
     }
 
     @GetMapping(path = "/salaryMoreThan")
     public Collection<Employee> salaryMoreThan(@RequestParam(name = "amount", required = false) int amount) {
-        return service.salaryMoreThan(amount);
+        try {
+            return service.salaryMoreThan(amount);
+        } catch (NotEnterDataException e) {
+            throw new NotEnterDataException("enter data");
+        }
     }
 }

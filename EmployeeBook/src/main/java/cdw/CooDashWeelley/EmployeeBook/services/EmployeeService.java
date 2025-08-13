@@ -1,6 +1,6 @@
 package cdw.CooDashWeelley.EmployeeBook.services;
 
-import cdw.CooDashWeelley.EmployeeBook.Employee;
+import cdw.CooDashWeelley.EmployeeBook.model.Employee;
 
 import java.util.Collection;
 
@@ -12,7 +12,7 @@ public interface EmployeeService {
 
     Employee find(String firstName, String lastName, Integer salary, Integer department);
 
-    Collection <Employee> showAll ();
+    Collection<Employee> showAll();
 
     int monthSalary();
 

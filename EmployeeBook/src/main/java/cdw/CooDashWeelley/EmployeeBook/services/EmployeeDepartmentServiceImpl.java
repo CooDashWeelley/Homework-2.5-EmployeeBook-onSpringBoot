@@ -1,9 +1,8 @@
 package cdw.CooDashWeelley.EmployeeBook.services;
 
-import cdw.CooDashWeelley.EmployeeBook.Employee;
+import cdw.CooDashWeelley.EmployeeBook.model.Employee;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +57,7 @@ public class EmployeeDepartmentServiceImpl implements EmployeeDepartmentService 
                 .collect(Collectors.toList());
     }
 
-    public List<Employee> getAllEmployeesByDepartment () {
+    public List<Employee> getAllEmployeesByDepartment() {
         return service.getEmployeeList().stream()
                 .sorted(Comparator.comparing(e -> e.getDepartment()))
                 .collect(Collectors.toList());

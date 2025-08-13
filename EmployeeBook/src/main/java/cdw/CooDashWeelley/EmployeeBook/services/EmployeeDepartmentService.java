@@ -1,6 +1,6 @@
 package cdw.CooDashWeelley.EmployeeBook.services;
 
-import cdw.CooDashWeelley.EmployeeBook.Employee;
+import cdw.CooDashWeelley.EmployeeBook.model.Employee;
 
 import java.util.Collection;
 

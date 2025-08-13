@@ -1,4 +1,4 @@
-package cdw.CooDashWeelley.EmployeeBook;
+package cdw.CooDashWeelley.EmployeeBook.model;
 
 import java.util.Objects;
 
