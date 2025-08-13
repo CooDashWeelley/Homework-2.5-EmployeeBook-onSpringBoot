@@ -28,10 +28,12 @@ public class EmployeeBookController {
 
     @GetMapping(path = "/add")
     public Employee addEmployee(@RequestParam(name = "firstName", required = false) String firstName,
-                                @RequestParam(name = "lastName", required = false) String lastName
+                                @RequestParam(name = "lastName", required = false) String lastName,
+                                @RequestParam(name = "salary", required = false) int salary,
+                                @RequestParam(name = "department", required = false) int department
     ) {
         try {
-            return service.add(firstName, lastName);
+            return service.add(firstName, lastName, salary, department);
         } catch (EmployeeStorageIsFullException e) {
             throw new EmployeeStorageIsFullException("storage is full");
         } catch (EmployeeAlreadyAddedException e) {
@@ -43,10 +45,12 @@ public class EmployeeBookController {
 
     @GetMapping(path = "/remove")
     public Employee removeEmployee(@RequestParam(name = "firstName", required = false) String firstName,
-                                   @RequestParam(name = "lastName", required = false) String lastName
+                                   @RequestParam(name = "lastName", required = false) String lastName,
+                                   @RequestParam(name = "salary", required = false) int salary,
+                                   @RequestParam(name = "department", required = false) int department
     ) {
         try {
-            return service.remove(firstName, lastName);
+            return service.remove(firstName, lastName, salary, department);
         } catch (EmployeeNotFoundException e) {
             throw new EmployeeNotFoundException("not found");
         } catch (NotEnterDataException e) {
@@ -56,10 +60,12 @@ public class EmployeeBookController {
 
     @GetMapping(path = "/find")
     public Employee findEmployee(@RequestParam(name = "firstName", required = false) String firstName,
-                                 @RequestParam(name = "lastName", required = false) String lastName
+                                 @RequestParam(name = "lastName", required = false) String lastName,
+                                 @RequestParam(name = "salary", required = false) int salary,
+                                 @RequestParam(name = "department", required = false) int department
     ) {
         try {
-            return service.find(firstName, lastName);
+            return service.find(firstName, lastName, salary, department);
         } catch (EmployeeNotFoundException e) {
             throw new EmployeeNotFoundException("not found");
         } catch (NotEnterDataException e) {
@@ -70,5 +76,68 @@ public class EmployeeBookController {
     @GetMapping(path = "/showAll")
     public Collection<Employee> showAllEmployees() {
         return service.showAll();
+    }
+
+    @GetMapping(path = "/monthSalary")
+    public int monthSalary() {
+        return service.monthSalary();
+    }
+
+    @GetMapping(path = "/minSalary")
+    public Employee minSalary() {
+        return service.minSalary();
+    }
+
+    @GetMapping(path = "/maxSalary")
+    public Employee maxSalary() {
+        return service.maxSalary();
+    }
+
+    @GetMapping(path = "/averageSalary")
+    public int averageSalary() {
+        return service.averageSalary();
+    }
+
+    @GetMapping(path = "/indexSalary")
+    public String indexSalary(@RequestParam(name = "index", required = false) int index) {
+        service.indexSalary(index);
+        return "ЗП проиндексирована на " + index + " %";
+    }
+
+    @GetMapping(path = "/minSalaryInDep")
+    public Employee minSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
+        return service.minSalaryInDepartment(dep);
+    }
+
+    @GetMapping(path = "/maxSalaryInDep")
+    public Employee maxSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
+        return service.maxSalaryInDepartment(dep);
+    }
+
+    @GetMapping(path = "/monthSalaryInDep")
+    public int monthSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
+        return service.monthSalaryInDepartment(dep);
+    }
+
+    @GetMapping(path = "/indexSalaryInDep")
+    public String indexSalaryInDep(@RequestParam(name = "dep", required = false) int dep,
+                                   @RequestParam(name = "index", required = false) int index) {
+        service.indexSalaryInDepartment(dep, index);
+        return "ЗП проиндексирована в отделе: " + dep + " на " + index + " %";
+    }
+
+    @GetMapping(path = "/empInDep")
+    public Collection <Employee> employeesInDepartment(@RequestParam(name = "dep", required = false) int dep) {
+        return service.employeesInDepartment(dep);
+    }
+
+    @GetMapping(path = "/salaryLessThan")
+    public Collection <Employee> salaryLessThan(@RequestParam(name = "amount", required = false) int amount) {
+        return service.salaryLessThan(amount);
+    }
+
+    @GetMapping(path = "/salaryMoreThan")
+    public Collection <Employee> salaryMoreThan(@RequestParam(name = "amount", required = false) int amount) {
+        return service.salaryMoreThan(amount);
     }
 }
