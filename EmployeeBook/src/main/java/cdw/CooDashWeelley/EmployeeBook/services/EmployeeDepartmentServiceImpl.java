@@ -3,91 +3,64 @@ package cdw.CooDashWeelley.EmployeeBook.services;
 import cdw.CooDashWeelley.EmployeeBook.Employee;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeDepartmentServiceImpl implements EmployeeDepartmentService {
-    private EmployeeServiceImpl service;
-    private Map<String, Employee> employeeMap;
+    private final EmployeeServiceImpl service;
+    private List<Employee> employeeList;
 
-    public EmployeeDepartmentServiceImpl (EmployeeServiceImpl employeeService) {
+    public EmployeeDepartmentServiceImpl(EmployeeServiceImpl employeeService) {
         this.service = employeeService;
     }
 
-    public Map<String, Employee> employeeMap() {
-        Map<String, Employee> employeeMap = new HashMap<>();
-    }
+
     @Override
     public Employee minSalaryInDepartment(int department) {
-        int minSalaryInDepartment = 0;
-        int idOfMinSalaryInDepartment = 0;
-        for (int i = 0; i < this.employeeMap.size(); i++) {
-            if (this.employeeMap.get(i) != null && this.employeeMap.get(i).getDepartment() == department && minSalaryInDepartment == 0) {
-                minSalaryInDepartment = this.employeeMap.get(i).getSalary();
-            }
-            if (this.employeeMap.get(i) != null && this.employeeMap.get(i).getDepartment() == department && minSalaryInDepartment >= this.employeeMap.get(i).getSalary()) {
-                minSalaryInDepartment = this.employeeMap.get(i).getSalary();
-                idOfMinSalaryInDepartment = i;
-            }
-        }
-        return this.employeeMap.get(idOfMinSalaryInDepartment);
+        return employeesInDepartment(department).stream()
+                .min(Comparator.comparing(e -> e.getSalary()))
+                .get();
     }
 
     @Override
     public Employee maxSalaryInDepartment(int department) {
-        int maxSalaryInDepartment = 0;
-        int idOfMinSalaryInDepartment = 0;
-        for (int i = 0; i < this.employeeMap.size(); i++) {
-            if (this.employeeMap.get(i) != null && this.employeeMap.get(i).getDepartment() == department && maxSalaryInDepartment == 0) {
-                maxSalaryInDepartment = this.employeeMap.get(i).getSalary();
-            }
-            if (this.employeeMap.get(i) != null && this.employeeMap.get(i).getDepartment() == department && maxSalaryInDepartment <= this.employeeMap.get(i).getSalary()) {
-                maxSalaryInDepartment = this.employeeMap.get(i).getSalary();
-                idOfMinSalaryInDepartment = i;
-            }
-        }
-        return this.employeeMap.get(idOfMinSalaryInDepartment);
+        return employeesInDepartment(department).stream()
+                .max(Comparator.comparing(e -> e.getSalary()))
+                .get();
     }
 
     @Override
     public int monthSalaryInDepartment(int department) {
-        int sum = 0;
-        for (Employee employee : this.employeeMap) {
-            if (employee != null && employee.getDepartment() == department) {
-                sum += employee.getSalary();
-            }
-        }
-        return sum;
+        return employeesInDepartment(department).stream()
+                .mapToInt(e -> e.getSalary())
+                .sum();
     }
 
     @Override
     public int averageSalaryInDepartment(int department) {
-        int amountOfEmployeeInDepartment = 0;
-        for (Employee employee : this.employeeMap) {
-            if (employee != null && employee.getDepartment() == department) {
-                amountOfEmployeeInDepartment++;
-            }
-        }
-        return monthSalaryInDepartment(department) / amountOfEmployeeInDepartment;
+        return monthSalaryInDepartment(department) / employeesInDepartment(department).size();
     }
 
     @Override
     public void indexSalaryInDepartment(int department, int index) {
-        for (Employee employee : this.employeeMap) {
-            if (employee != null && employee.getDepartment() == department) {
-                employee.setSalary(employee.getSalary() + employee.getSalary() / 100 * index);
-            }
-        }
+        employeesInDepartment(department).stream()
+                .map(e -> e.getSalary() / 100 * index)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Collection<Employee> employeesInDepartment(int department) {
-        List<Employee> employeesInDepartmentList = new ArrayList<>();
-        for (Employee employee : this.employeeMap) {
-            if (employee != null && employee.getDepartment() == department) {
-                employeesInDepartmentList.add(employee);
-            }
-        }
-        return employeesInDepartmentList;
+    public List<Employee> employeesInDepartment(int department) {
+        return service.getEmployeeList().stream()
+                .filter(e -> e.getDepartment() == department)
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> getAllEmployeesByDepartment () {
+        return service.getEmployeeList().stream()
+                .sorted(Comparator.comparing(e -> e.getDepartment()))
+                .collect(Collectors.toList());
     }
 }

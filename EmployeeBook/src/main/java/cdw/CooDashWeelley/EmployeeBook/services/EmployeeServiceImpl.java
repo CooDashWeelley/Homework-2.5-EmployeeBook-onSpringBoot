@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public List<Employee> getEmployeeList() {
-        return new ArrayList<>(employeeList);
+        return employeeList;
     }
 
     @Override

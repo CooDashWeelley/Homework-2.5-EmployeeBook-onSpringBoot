@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.List;
 
 @RequestMapping("/employee/department")
 @RestController
@@ -23,30 +24,33 @@ public class EmployeeDepartmentController {
         return "Welcome In Department";
     }
 
-    @GetMapping(path = "/minSalaryInDep")
-    public Employee minSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
+    @GetMapping(path = "/min-salary")
+    public Employee minSalaryInDep(@RequestParam(name = "departmentId", required = false) int dep) {
         return service.minSalaryInDepartment(dep);
     }
 
-    @GetMapping(path = "/maxSalaryInDep")
-    public Employee maxSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
+    @GetMapping(path = "/max-salary")
+    public Employee maxSalaryInDep(@RequestParam(name = "departmentId", required = false) int dep) {
         return service.maxSalaryInDepartment(dep);
     }
 
-    @GetMapping(path = "/monthSalaryInDep")
-    public int monthSalaryInDep(@RequestParam(name = "dep", required = false) int dep) {
+    @GetMapping(path = "/monthSalary")
+    public int monthSalaryInDep(@RequestParam(name = "departmentId", required = false) int dep) {
         return service.monthSalaryInDepartment(dep);
     }
 
-    @GetMapping(path = "/indexSalaryInDep")
-    public String indexSalaryInDep(@RequestParam(name = "dep", required = false) int dep,
+    @GetMapping(path = "/indexSalary")
+    public String indexSalaryInDep(@RequestParam(name = "departmentId", required = false) int dep,
                                    @RequestParam(name = "index", required = false) int index) {
         service.indexSalaryInDepartment(dep, index);
         return "ЗП проиндексирована в отделе: " + dep + " на " + index + " %";
     }
 
-    @GetMapping(path = "/empInDep")
-    public Collection<Employee> employeesInDepartment(@RequestParam(name = "dep", required = false) int dep) {
+    @GetMapping(path = "/all")
+    public List<Employee> employeesInDepartment(@RequestParam(value = "departmentId", required = false) Integer dep) {
+        if (dep == null) {
+            return service.getAllEmployeesByDepartment();
+        }
         return service.employeesInDepartment(dep);
     }
 
