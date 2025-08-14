@@ -1,6 +1,6 @@
 package cdw.CooDashWeelley.EmployeeBook.controllers;
 
-import cdw.CooDashWeelley.EmployeeBook.model.Employee;
+import cdw.CooDashWeelley.EmployeeBook.Employee;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeAlreadyAddedException;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeNotFoundException;
 import cdw.CooDashWeelley.EmployeeBook.exceptions.EmployeeStorageIsFullException;

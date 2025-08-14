@@ -1,4 +1,4 @@
-package cdw.CooDashWeelley.EmployeeBook.model;
+package cdw.CooDashWeelley.EmployeeBook;
 
 import java.util.Objects;
 
@@ -59,7 +59,7 @@ public class Employee {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(firstName, lastName, salary, department);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package cdw.CooDashWeelley.EmployeeBook.controllers;
 
 import cdw.CooDashWeelley.EmployeeBook.exceptions.NotEnterDataException;
-import cdw.CooDashWeelley.EmployeeBook.model.Employee;
+import cdw.CooDashWeelley.EmployeeBook.Employee;
 import cdw.CooDashWeelley.EmployeeBook.services.EmployeeDepartmentServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
